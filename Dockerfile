@@ -1,26 +1,15 @@
-# Use an official Node.js image as a base
-FROM node:18
+# Use a base image with Python
+FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy requirements and install dependencies
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+# Copy the application code
 COPY . .
 
-# Build the Vue.js app for production
-RUN npm run build
-
-# Install a basic web server
-RUN npm install -g serve
-
-# Set the command to serve the app
-CMD ["serve", "-s", "dist"]
-
-# Expose port 5000 (or any port you prefer)
-EXPOSE 5000
+# Set the command to run your application
+CMD ["python", "main.py"]
